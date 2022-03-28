@@ -9,11 +9,14 @@ function App() {
   // let posts = '강남 고기 맛집';
   // document.getElementById().innerHTML=''?
 
-  let [title, titleRetouch] = useState(['봄에 좋은 향수 추천', '기온별 옷 추천', '리액트 독학']);
+  let [글제목, 글제목변경] = useState(['봄에 좋은 향수 추천', '기온별 옷 추천', '리액트 독학']);
   let [like, retouch] = useState([0]);
+
+  let [누른제목, 누른제목변경] = useState(0);
 
   // retouch(10); // 대체 할 데이터
   let [modal, modal변경] = useState(false);
+  let [입력값, 입력값변경] = useState('');
 
   // function retitle() {
   //   var newArray = [...title];
@@ -25,10 +28,14 @@ function App() {
       <div className="black-nav">
         <div>개발 Blog</div>
       </div>
-      {title.map(function (글) {
+      {글제목.map(function (글, i) {
         return (
-          <div className="list">
-            <h3>
+          <div className="list" key={i}>
+            <h3
+              onClick={() => {
+                누른제목변경(i);
+              }}
+            >
               {글}
               <span
                 onClick={() => {
@@ -44,6 +51,22 @@ function App() {
           </div>
         );
       })}
+      {/* 
+      <input
+        onChange={(e) => {
+         입력값변경( e.target.value)
+        }}
+      /> */}
+     <div className="publish">
+        <input onChange={ (e)=>{ 입력값변경(e.target.value) } } />
+        <button onClick={ ()=>{ 
+
+          let arrayCopy = [...글제목];
+          arrayCopy.unshift(입력값);
+          글제목변경( arrayCopy )
+
+         }}>저장</button>
+      </div>
       <button
         onClick={() => {
           modal변경(!modal);
@@ -52,7 +75,7 @@ function App() {
         열고 닫기
       </button>
 
-      {modal === true ? <Modal title={title}></Modal> : null}
+      {modal === true ? <Modal title={title} 누른제목={누른제목}></Modal> : null}
     </div>
   );
 }
@@ -60,7 +83,7 @@ function App() {
 function Modal(props) {
   return (
     <div className="modal">
-      <h2>{props.title[0]}</h2>
+      <h2>{props.title[props.누른제목]}</h2>
       <p>날짜</p>
       <p>상세내용</p>
     </div>
